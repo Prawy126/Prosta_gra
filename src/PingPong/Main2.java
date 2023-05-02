@@ -1,3 +1,5 @@
+package PingPong;
+
 import javax.swing.*;
 
 public class Main2 {

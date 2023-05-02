@@ -1,3 +1,5 @@
+package ProstaGra;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -43,8 +45,8 @@ public class Gra extends JPanel implements KeyListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
-        ey+=2;
-        if(ey == 580){
+        ey+=2+punkty;
+        if(ey >= 580){
             punkty++;
             ey=10;
             wrogX1 = liczba.nextInt(6)*100;
@@ -91,6 +93,7 @@ public class Gra extends JPanel implements KeyListener, ActionListener {
         }
         if(e.getKeyCode() == KeyEvent.VK_ENTER){
             reset();
+            punkty  = 0;
         }
     }
 

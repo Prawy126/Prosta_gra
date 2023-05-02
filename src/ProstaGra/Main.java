@@ -1,3 +1,7 @@
+package ProstaGra;
+
+import ProstaGra.Gra;
+
 import javax.swing.*;
 
 public class Main {
