@@ -13,6 +13,8 @@ public class Pingpong  extends JPanel implements KeyListener, ActionListener {
    //różne paramatry głónie przechowujące pozycje różnych obiektów
     private int pilkaX = 0 , pilkaY = 5,gracz1X = 200, gracz1Y = 0, gracz2X = 0, gracz2Y = 650;
     private int poruszanieX = 0, poruszanieY = 4;
+    private int dlugoscPaletki=90;
+    private int punkty2 , punkty1;
     //zmienna przechowująca ruch
     private Random random = new Random();
     //zmienna przechowująca czas
@@ -29,15 +31,24 @@ public class Pingpong  extends JPanel implements KeyListener, ActionListener {
         //stworzenie planszy
         g.setColor(Color.BLACK);
         g.fillRect(0,0,2000,2000);
+        g.setColor(Color.GRAY);
+        g.fillRect(375,0,1,800);
+        g.setColor(Color.WHITE);
+        g.fillRect(0,325,800,4);
         //piłka
         g.setColor(Color.CYAN);
         g.fillRect(pilkaX,pilkaY,10,10);
         //paletka 1
         g.setColor(Color.red);
-        g.fillRect(gracz1X,gracz1Y, 40,5);
+        g.fillRect(gracz1X,gracz1Y, dlugoscPaletki,5);
         //paletka 2
         g.setColor(Color.BLUE);
-        g.fillRect(gracz2X,gracz2Y,40,5);
+        g.fillRect(gracz2X,gracz2Y,dlugoscPaletki,5);
+        //punkty
+        g.setColor(Color.green);
+        g.setFont(new Font("serif",Font.BOLD,20));
+        g.drawString("Gracz1: " + punkty1 +" : "+ punkty2 + " :Gracz2",10,675);
+
     }
 
     @Override
@@ -47,8 +58,8 @@ public class Pingpong  extends JPanel implements KeyListener, ActionListener {
         pilkaY += poruszanieY;
         pilkaX += poruszanieX;
         //tworzenie obiektów na planszy
-        Rectangle gracz1 = new Rectangle(gracz1X,gracz1Y, 40,5);
-        Rectangle gracz2 = new Rectangle(gracz2X,gracz2Y, 40,5);
+        Rectangle gracz1 = new Rectangle(gracz1X,gracz1Y, dlugoscPaletki,5);
+        Rectangle gracz2 = new Rectangle(gracz2X,gracz2Y, dlugoscPaletki,5);
         Rectangle pilka = new Rectangle(pilkaX,pilkaY,10,10);
         if(pilka.intersects(gracz1)|| pilka.intersects(gracz2)){
             System.out.println(pilkaY);
@@ -61,7 +72,18 @@ public class Pingpong  extends JPanel implements KeyListener, ActionListener {
                 poruszanieY = poruszanieY*-1;
             }
         }
-        if(pilkaY <0 || pilkaY>700){
+        if(pilkaX<=0){
+            poruszanieX = -poruszanieX;
+        }
+        if(pilkaX>750){
+            poruszanieX = -poruszanieX;
+        }
+        if(pilkaY <0){
+            punkty2++;
+            time.stop();
+        }
+        if(pilkaY>700){
+            punkty1++;
             time.stop();
         }
     }
@@ -75,20 +97,20 @@ public class Pingpong  extends JPanel implements KeyListener, ActionListener {
     public void keyPressed(KeyEvent e) {
         //ruch czerwonej paletki
         if(e.getKeyCode() == KeyEvent.VK_A){
-            if(gracz1X>0)gracz1X-=5;
+            if(gracz1X>0)gracz1X-=10;
             else gracz1X = 0;
         }
         if(e.getKeyCode() == KeyEvent.VK_D){
-            if(gracz1X<750)gracz1X+=5;
+            if(gracz1X<750)gracz1X+=10;
             else gracz1X = 750;
         }
         //ruch niebieskiej paletki
         if(e.getKeyCode() == KeyEvent.VK_LEFT){
-            if(gracz2X>0) gracz2X -=5;
+            if(gracz2X>0) gracz2X -=10;
             else gracz2X = 0;
         }
         if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-            if(gracz2X<750) gracz2X +=5;
+            if(gracz2X<750) gracz2X +=10;
             else gracz2X = 750;
         }
         //jeśli naciśnie się enter zaczyna się spokojne rozpoczęcie
