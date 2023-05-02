@@ -6,16 +6,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Random;
 
 public class Pingpong  extends JPanel implements KeyListener, ActionListener {
     //podstawowe parametry
-    private int pilkaX = 0 , pilkaY = 5,gracz1X = 200, gracz1Y = 0;
+   //różne paramatry głónie przechowujące pozycje różnych obiektów
+    private int pilkaX = 0 , pilkaY = 5,gracz1X = 200, gracz1Y = 0, gracz2X = 0, gracz2Y = 650;
+    private int poruszanieX = 0, poruszanieY = 4;
+    //zmienna przechowująca ruch
+    private Random random = new Random();
+    //zmienna przechowująca czas
+    private Timer time;
     public Pingpong(){
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         addKeyListener(this);
         //uruchomienie gry
-        Timer time = new Timer(10, this);
+        time = new Timer(10, this);
         time.start();
     }
     public void paint(Graphics g){
@@ -30,15 +37,33 @@ public class Pingpong  extends JPanel implements KeyListener, ActionListener {
         g.fillRect(gracz1X,gracz1Y, 40,5);
         //paletka 2
         g.setColor(Color.BLUE);
-        g.fillRect(0,650,40,5);
+        g.fillRect(gracz2X,gracz2Y,40,5);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         //odświeżanie planszy
         repaint();
-        pilkaY++;
-        System.out.println(pilkaY);
+        pilkaY += poruszanieY;
+        pilkaX += poruszanieX;
+        //tworzenie obiektów na planszy
+        Rectangle gracz1 = new Rectangle(gracz1X,gracz1Y, 40,5);
+        Rectangle gracz2 = new Rectangle(gracz2X,gracz2Y, 40,5);
+        Rectangle pilka = new Rectangle(pilkaX,pilkaY,10,10);
+        if(pilka.intersects(gracz1)|| pilka.intersects(gracz2)){
+            System.out.println(pilkaY);
+            //fizyka odbijania piłki
+            if(pilkaY>600){
+                poruszanieY = (-1)*Math.abs(random.nextInt()%10);
+                poruszanieX = random.nextInt()%10;
+            }
+            if(pilkaY<10){
+                poruszanieY = poruszanieY*-1;
+            }
+        }
+        if(pilkaY <0 || pilkaY>700){
+            time.stop();
+        }
     }
 
     @Override
@@ -57,6 +82,19 @@ public class Pingpong  extends JPanel implements KeyListener, ActionListener {
             if(gracz1X<750)gracz1X+=5;
             else gracz1X = 750;
         }
+        //ruch niebieskiej paletki
+        if(e.getKeyCode() == KeyEvent.VK_LEFT){
+            if(gracz2X>0) gracz2X -=5;
+            else gracz2X = 0;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+            if(gracz2X<750) gracz2X +=5;
+            else gracz2X = 750;
+        }
+        //jeśli naciśnie się enter zaczyna się spokojne rozpoczęcie
+        if(e.getKeyCode() == KeyEvent.VK_ENTER){
+            reset();
+        }
     }
 
 
@@ -64,5 +102,13 @@ public class Pingpong  extends JPanel implements KeyListener, ActionListener {
     @Override
     public void keyReleased(KeyEvent e) {
 
+    }
+    //reset gry, gra rozpoczyna się spokojnie
+    private void reset(){
+        pilkaX = 20;
+        pilkaY = 20;
+        time.start();
+        poruszanieX = 0;
+        poruszanieY = 2;
     }
 }
