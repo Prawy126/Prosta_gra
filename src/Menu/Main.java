@@ -11,11 +11,6 @@ public class Main {
 
         Manu obraz = new Manu();
         menu.add(obraz);
-        JPanel jPanel = new JPanel();
-        jPanel.addMouseListener(obraz);
-
-
-        menu.add(jPanel);
 
         menu.setVisible(true);
     }
